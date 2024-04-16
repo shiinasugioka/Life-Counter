@@ -103,6 +103,7 @@
 		DB23887E2BCEF8E500777799 /* Life Counter */ = {
 			isa = PBXGroup;
 			children = (
+				DB2388B32BCF254900777799 /* Utils */,
 				DB23887F2BCEF8E500777799 /* AppDelegate.swift */,
 				DB2388812BCEF8E500777799 /* SceneDelegate.swift */,
 				DB2388832BCEF8E500777799 /* ViewController.swift */,
@@ -110,8 +111,6 @@
 				DB2388882BCEF8E700777799 /* Assets.xcassets */,
 				DB23888A2BCEF8E700777799 /* LaunchScreen.storyboard */,
 				DB23888D2BCEF8E700777799 /* Info.plist */,
-				DB2388AF2BCF05FF00777799 /* Variables.swift */,
-				DB2388B12BCF09A500777799 /* Strings.swift */,
 			);
 			path = "Life Counter";
 			sourceTree = "<group>";
@@ -131,6 +130,15 @@
 				DB2388A22BCEF8E700777799 /* Life_CounterUITestsLaunchTests.swift */,
 			);
 			path = "Life CounterUITests";
+			sourceTree = "<group>";
+		};
+		DB2388B32BCF254900777799 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				DB2388AF2BCF05FF00777799 /* Variables.swift */,
+				DB2388B12BCF09A500777799 /* Strings.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

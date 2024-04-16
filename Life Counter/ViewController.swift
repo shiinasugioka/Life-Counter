@@ -2,13 +2,14 @@
 //  ViewController.swift
 //  Life Counter
 //
-//  Created by stlp on 4/16/24.
+//  Created by Shiina on 4/16/24.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var backgroundView: UIView!
+    @IBOutlet weak var playerLostLabel: UILabel!
     
     // Player 1 Items
     @IBOutlet weak var player1Label: UILabel!
@@ -26,13 +27,21 @@ class ViewController: UIViewController {
     @IBOutlet weak var player2Add1: UIButton!
     @IBOutlet weak var player2Add5: UIButton!
     
+    var player1Points: Int = MyVariables.defaultLives
+    var player2Points: Int = MyVariables.defaultLives
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = MyVariables.white
+        playerLostLabel.isHidden = true
         
+        // Background
         backgroundView.backgroundColor = MyVariables.lightBlue
         backgroundView.layer.cornerRadius = MyVariables.cornerRadius
         backgroundView.layer.masksToBounds = true
+        
+        // Player Lost Label
+        playerLostLabel.textColor = MyVariables.darkBlue
         
         // Player 1 Items
         player1Label.text = Strings.player1Text
@@ -43,7 +52,7 @@ class ViewController: UIViewController {
         player1Score.backgroundColor = MyVariables.darkBlue
         player1Score.layer.cornerRadius = MyVariables.cornerRadius
         player1Score.layer.masksToBounds = true
-        player1Score.text = "\(MyVariables.defaultLives)"
+        player1Score.text = "\(player1Points)"
         
         player1Sub5.setTitle(Strings.sub5, for: .normal)
         player1Sub5.layer.cornerRadius = MyVariables.cornerRadius
@@ -65,6 +74,29 @@ class ViewController: UIViewController {
         player1Add5.layer.masksToBounds = true
         player1Add5.tintColor = MyVariables.green
         
+        // Connect buttons to action methods
+        player1Sub5.addTarget(
+            self, 
+            action: #selector(updateScore),
+            for: .touchUpInside
+        )
+        player1Sub1.addTarget(
+            self, 
+            action: #selector(updateScore),
+            for: .touchUpInside
+        )
+        player1Add1.addTarget(
+            self, 
+            action: #selector(updateScore),
+            for: .touchUpInside
+        )
+        player1Add5.addTarget(
+            self, 
+            action: #selector(updateScore),
+            for: .touchUpInside
+        )
+        
+        
         // Player 2 Items
         player2Label.text = Strings.player2Text
         player2Label.textColor = MyVariables.darkBlue
@@ -74,7 +106,7 @@ class ViewController: UIViewController {
         player2Score.backgroundColor = MyVariables.darkBlue
         player2Score.layer.cornerRadius = MyVariables.cornerRadius
         player2Score.layer.masksToBounds = true
-        player2Score.text = "\(MyVariables.defaultLives)"
+        player2Score.text = "\(player2Points)"
         
         player2Sub5.setTitle(Strings.sub5, for: .normal)
         player2Sub5.layer.cornerRadius = MyVariables.cornerRadius
@@ -96,7 +128,80 @@ class ViewController: UIViewController {
         player2Add5.layer.masksToBounds = true
         player2Add5.tintColor = MyVariables.green
         
+        // Connect buttons to action methods
+        player2Sub5.addTarget(
+            self,
+            action: #selector(updateScore),
+            for: .touchUpInside
+        )
+        player2Sub1.addTarget(
+            self,
+            action: #selector(updateScore),
+            for: .touchUpInside
+        )
+        player2Add1.addTarget(
+            self,
+            action: #selector(updateScore),
+            for: .touchUpInside
+        )
+        player2Add5.addTarget(
+            self,
+            action: #selector(updateScore),
+            for: .touchUpInside
+        )
         
+        
+    }
+    
+    @objc func updateScore(sender: UIButton) {
+        var updateBy: Int = 0
+        var playerNum: Int = 0
+        
+        switch sender {
+        case player1Sub5:
+            updateBy = -5
+            playerNum = 1
+        case player1Sub1:
+            updateBy = -1
+            playerNum = 1
+        case player1Add1:
+            updateBy = 1
+            playerNum = 1
+        case player1Add5:
+            updateBy = 5
+            playerNum = 1
+        case player2Sub5:
+            updateBy = -5
+            playerNum = 2
+        case player2Sub1:
+            updateBy = -1
+            playerNum = 2
+        case player2Add1:
+            updateBy = 1
+            playerNum = 2
+        case player2Add5:
+            updateBy = 5
+            playerNum = 2
+        default:
+            break
+        }
+        
+        if (playerNum == 1) {
+            player1Points += updateBy
+            if (player1Points >= 999) { player1Points = 999 }
+            player1Score.text = "\(player1Points)"
+        } else if (playerNum == 2) {
+            player2Points += updateBy
+            if (player2Points >= 999) { player2Points = 999 }
+            player2Score.text = "\(player2Points)"
+        }
+        
+        if (player1Points <= 0) {
+            playerLostLabel.text = Strings.player1LostText
+        } else if (player2Points <= 0) {
+            playerLostLabel.text = Strings.player2LostText
+            playerLostLabel.isHidden = false
+        }
         
     }
 }

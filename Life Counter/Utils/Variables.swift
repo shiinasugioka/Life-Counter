@@ -2,7 +2,7 @@
 //  Variables.swift
 //  Life Counter
 //
-//  Created by stlp on 4/16/24.
+//  Created by Shiina on 4/16/24.
 //
 
 import Foundation

@@ -2,7 +2,7 @@
 //  Strings.swift
 //  Life Counter
 //
-//  Created by stlp on 4/16/24.
+//  Created by Shiina on 4/16/24.
 //
 
 import Foundation
@@ -15,6 +15,9 @@ struct Strings {
     static let sub1: String = "- 1"
     static let add1: String = "+ 1"
     static let add5: String = "+ 5"
+    
+    static let player1LostText = "Player 1 Lost!"
+    static let player2LostText = "Player 2 Lost!"
     
     
 }
