@@ -37,55 +37,63 @@ class ViewController: UIViewController {
         // Player 1 Items
         player1Label.text = Strings.player1Text
         player1Label.textColor = MyVariables.darkBlue
-        player1Label.layer.cornerRadius = MyVariables.cornerRadius
-        player1Label.layer.masksToBounds = true
         
         player1Score.textColor = MyVariables.white
+        player1Score.preferredMaxLayoutWidth = 336
         player1Score.backgroundColor = MyVariables.darkBlue
         player1Score.layer.cornerRadius = MyVariables.cornerRadius
+        player1Score.layer.masksToBounds = true
         player1Score.text = "\(MyVariables.defaultLives)"
         
         player1Sub5.setTitle(Strings.sub5, for: .normal)
         player1Sub5.layer.cornerRadius = MyVariables.cornerRadius
+        player1Sub5.layer.masksToBounds = true
         player1Sub5.tintColor = MyVariables.red
         
         player1Sub1.setTitle(Strings.sub1, for: .normal)
         player1Sub1.layer.cornerRadius = MyVariables.cornerRadius
+        player1Sub1.layer.masksToBounds = true
         player1Sub1.tintColor = MyVariables.red
         
         player1Add1.setTitle(Strings.add1, for: .normal)
         player1Add1.layer.cornerRadius = MyVariables.cornerRadius
+        player1Add1.layer.masksToBounds = true
         player1Add1.tintColor = MyVariables.green
         
         player1Add5.setTitle(Strings.add5, for: .normal)
         player1Add5.layer.cornerRadius = MyVariables.cornerRadius
+        player1Add5.layer.masksToBounds = true
         player1Add5.tintColor = MyVariables.green
         
         // Player 2 Items
         player2Label.text = Strings.player2Text
         player2Label.textColor = MyVariables.darkBlue
-        player2Label.layer.cornerRadius = MyVariables.cornerRadius
-        player2Label.layer.masksToBounds = true
         
         player2Score.textColor = MyVariables.white
+        player2Score.preferredMaxLayoutWidth = 336
         player2Score.backgroundColor = MyVariables.darkBlue
         player2Score.layer.cornerRadius = MyVariables.cornerRadius
+        player2Score.layer.masksToBounds = true
         player2Score.text = "\(MyVariables.defaultLives)"
         
         player2Sub5.setTitle(Strings.sub5, for: .normal)
         player2Sub5.layer.cornerRadius = MyVariables.cornerRadius
+        player2Sub5.layer.masksToBounds = true
         player2Sub5.tintColor = MyVariables.red
         
         player2Sub1.setTitle(Strings.sub1, for: .normal)
         player2Sub1.layer.cornerRadius = MyVariables.cornerRadius
+        player2Sub1.layer.masksToBounds = true
         player2Sub1.tintColor = MyVariables.red
         
         player2Add1.setTitle(Strings.add1, for: .normal)
         player2Add1.layer.cornerRadius = MyVariables.cornerRadius
+        player2Add1.layer.masksToBounds = true
         player2Add1.tintColor = MyVariables.green
         
         player2Add5.setTitle(Strings.add5, for: .normal)
         player2Add5.layer.cornerRadius = MyVariables.cornerRadius
+        player2Add5.layer.masksToBounds = true
         player2Add5.tintColor = MyVariables.green
         
         
