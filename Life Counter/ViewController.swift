@@ -76,22 +76,22 @@ class ViewController: UIViewController {
         
         // Connect buttons to action methods
         player1Sub5.addTarget(
-            self, 
+            self,
             action: #selector(updateScore),
             for: .touchUpInside
         )
         player1Sub1.addTarget(
-            self, 
+            self,
             action: #selector(updateScore),
             for: .touchUpInside
         )
         player1Add1.addTarget(
-            self, 
+            self,
             action: #selector(updateScore),
             for: .touchUpInside
         )
         player1Add5.addTarget(
-            self, 
+            self,
             action: #selector(updateScore),
             for: .touchUpInside
         )
@@ -198,6 +198,7 @@ class ViewController: UIViewController {
         
         if (player1Points <= 0) {
             playerLostLabel.text = Strings.player1LostText
+            playerLostLabel.isHidden = false
         } else if (player2Points <= 0) {
             playerLostLabel.text = Strings.player2LostText
             playerLostLabel.isHidden = false
