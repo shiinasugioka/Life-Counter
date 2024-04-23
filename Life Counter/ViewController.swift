@@ -65,7 +65,7 @@ class ViewController: UIViewController {
         for i in 1...4 {
             let name = "Player \(i)"
             let newPlayer = Player(name, MyVariables.defaultLives)
-            let playerView = createPlayerView(newPlayer)
+            let playerView = createPlayerView(newPlayer, i)
             players.append(newPlayer)
             allPlayersStack.addArrangedSubview(playerView)
             updateGameHistory("Added \(name) to game.")
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         gameOver = false
     }
     
-    func createPlayerView(_ player: Player) -> UIStackView {
+    func createPlayerView(_ player: Player, _ index: Int) -> UIStackView {
         let playerView = UIStackView() // player stack
         playerView.axis = .vertical
         playerView.alignment = .fill
@@ -117,6 +117,7 @@ class ViewController: UIViewController {
         minusButton.addTarget(self,
                               action: #selector(minusButtonTapped(_:)),
                               for: .touchUpInside)
+        minusButton.tag = index
         minusButton.backgroundColor = MyVariables.red
         minusButton.setTitleColor(MyVariables.darkBlue, for: .normal)
         minusButton.layer.cornerRadius = MyVariables.cornerRadius
@@ -131,6 +132,7 @@ class ViewController: UIViewController {
         scoreInput.backgroundColor = MyVariables.white
         scoreInput.translatesAutoresizingMaskIntoConstraints = false
         scoreInput.textAlignment = .center
+        scoreInput.tag = index
         adjustScoreView.addArrangedSubview(scoreInput)
         
         let addButton = UIButton(type: .system)
@@ -138,6 +140,7 @@ class ViewController: UIViewController {
         addButton.addTarget(self,
                             action: #selector(addButtonTapped(_:)),
                             for: .touchUpInside)
+        addButton.tag = index
         addButton.backgroundColor = MyVariables.green
         addButton.setTitleColor(MyVariables.darkBlue, for: .normal)
         addButton.layer.cornerRadius = MyVariables.cornerRadius
@@ -161,19 +164,15 @@ class ViewController: UIViewController {
     }
     
     @objc func minusButtonTapped(_ sender: UIButton) {
-        guard let playerView = sender.superview?.superview as? UIStackView,
-        let nameAndScoreView = playerView.arrangedSubviews.first as? UIStackView,
-        let scoreLabel = nameAndScoreView.arrangedSubviews.last as? UILabel,
-            let scoreInputView = playerView.arrangedSubviews.last as? UIStackView,
-            let scoreInput = scoreInputView.arrangedSubviews[1] as? UITextField,
-            let playerIndex = allPlayersStack.arrangedSubviews.firstIndex(of: playerView),
-            var player = players[safe: playerIndex],
-            let inputText = scoreLabel.text,
-            let currentScore = Int(inputText),
-            let inputText = scoreInput.text,
-            let decreaseAmount = Int(inputText) else {
-                return
-            }
+        guard let index = sender.tag,
+              var player = players[safe: index],
+              let scoreLabel = allPlayersStack.arrangedSubviews[index].subviews.first(where: { $0 is UILabel }) as? UILabel,
+              let scoreInput = allPlayersStack.arrangedSubviews[index].subviews.first(where: { $0 is UITextField }) as? UITextField,
+              let inputText = scoreLabel.text,
+              let currentScore = Int(inputText),
+              let decreaseAmount = Int(scoreInput.text ?? "") else {
+            return
+        }
         
         player.updateLives(-decreaseAmount)
         scoreLabel.text = "\(player.lives)"
@@ -182,17 +181,13 @@ class ViewController: UIViewController {
     }
     
     @objc func addButtonTapped(_ sender: UIButton) {
-        guard let playerView = sender.superview?.superview as? UIStackView,
-              let nameAndScoreView = playerView.arrangedSubviews.first as? UIStackView,
-              let scoreLabel = nameAndScoreView.arrangedSubviews.last as? UILabel,
-              let scoreInputView = playerView.arrangedSubviews.last as? UIStackView,
-              let scoreInput = scoreInputView.arrangedSubviews[1] as? UITextField,
-              let playerIndex = allPlayersStack.arrangedSubviews.firstIndex(of: playerView),
-              var player = players[safe: playerIndex],
+        guard let index = sender.tag,
+              var player = players[safe: index],
+              let scoreLabel = allPlayersStack.arrangedSubviews[index].subviews.first(where: { $0 is UILabel }) as? UILabel,
+              let scoreInput = allPlayersStack.arrangedSubviews[index].subviews.first(where: { $0 is UITextField }) as? UITextField,
               let inputText = scoreLabel.text,
               let currentScore = Int(inputText),
-              let inputText = scoreInput.text,
-              let increaseAmount = Int(inputText) else {
+              let increaseAmount = Int(scoreInput.text ?? "") else {
             return
         }
         
@@ -220,7 +215,7 @@ class ViewController: UIViewController {
         
         while allPlayersStack.arrangedSubviews.count < newValue {
             let newPlayer = Player("Player \(allPlayersStack.arrangedSubviews.count + 1)", 20)
-            let playerView = createPlayerView(newPlayer)
+            let playerView = createPlayerView(newPlayer, allPlayersStack.arrangedSubviews.count + 1)
             allPlayersStack.addArrangedSubview(playerView)
             updateGameHistory("Added \(newPlayer.name) to game.")
         }
