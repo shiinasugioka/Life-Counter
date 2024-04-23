@@ -7,9 +7,17 @@
 
 import UIKit
 
+extension Array {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
 class ViewController: UIViewController {
     
     var historyLog = [String]()
+    var players = [Player]()
+    var gameOver = false
     
     @IBOutlet weak var backgroundView: UIView!
     
@@ -58,9 +66,12 @@ class ViewController: UIViewController {
             let name = "Player \(i)"
             let newPlayer = Player(name, MyVariables.defaultLives)
             let playerView = createPlayerView(newPlayer)
+            players.append(newPlayer)
             allPlayersStack.addArrangedSubview(playerView)
             updateGameHistory("Added \(name) to game.")
         }
+        
+        gameOver = false
     }
     
     func createPlayerView(_ player: Player) -> UIStackView {
@@ -150,10 +161,48 @@ class ViewController: UIViewController {
     }
     
     @objc func minusButtonTapped(_ sender: UIButton) {
+        guard let playerView = sender.superview?.superview as? UIStackView,
+        let nameAndScoreView = playerView.arrangedSubviews.first as? UIStackView,
+        let scoreLabel = nameAndScoreView.arrangedSubviews.last as? UILabel,
+            let scoreInputView = playerView.arrangedSubviews.last as? UIStackView,
+            let scoreInput = scoreInputView.arrangedSubviews[1] as? UITextField,
+            let playerIndex = allPlayersStack.arrangedSubviews.firstIndex(of: playerView),
+            var player = players[safe: playerIndex],
+            let inputText = scoreLabel.text,
+            let currentScore = Int(inputText),
+            let inputText = scoreInput.text,
+            let decreaseAmount = Int(inputText) else {
+                return
+            }
         
+        player.updateLives(-decreaseAmount)
+        scoreLabel.text = "\(player.lives)"
+        updateGameHistory("\(player.name)'s score decreased by \(decreaseAmount)")
+        checkGameOver()
     }
     
     @objc func addButtonTapped(_ sender: UIButton) {
+        guard let playerView = sender.superview?.superview as? UIStackView,
+              let nameAndScoreView = playerView.arrangedSubviews.first as? UIStackView,
+              let scoreLabel = nameAndScoreView.arrangedSubviews.last as? UILabel,
+              let scoreInputView = playerView.arrangedSubviews.last as? UIStackView,
+              let scoreInput = scoreInputView.arrangedSubviews[1] as? UITextField,
+              let playerIndex = allPlayersStack.arrangedSubviews.firstIndex(of: playerView),
+              var player = players[safe: playerIndex],
+              let inputText = scoreLabel.text,
+              let currentScore = Int(inputText),
+              let inputText = scoreInput.text,
+              let increaseAmount = Int(inputText) else {
+            return
+        }
+        
+        player.updateLives(increaseAmount)
+        scoreLabel.text = "\(player.lives)"
+        updateGameHistory("\(player.name)'s score increased by \(increaseAmount)")
+        checkGameOver()
+    }
+    
+    func checkGameOver() {
         
     }
     
@@ -176,6 +225,8 @@ class ViewController: UIViewController {
             updateGameHistory("Added \(newPlayer.name) to game.")
         }
     }
+    
+    
 }
 
 struct Player {
