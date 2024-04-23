@@ -57,35 +57,47 @@ class ViewController: UIViewController {
     }
     
     func createPlayerView(_ player: Player) -> UIStackView {
-        let playerView = UIStackView()
+        let playerView = UIStackView() // player stack
         playerView.axis = .vertical
+        playerView.alignment = .fill
+        playerView.distribution = .equalSpacing
+        playerView.spacing = 1
         
         // player name
         let nameLabel = UITextField()
         nameLabel.text = player.name
         playerView.addArrangedSubview(nameLabel)
+        nameLabel.textColor = MyVariables.darkBlue
         
         // player score
         let scoreLabel = UILabel()
         scoreLabel.text = "\(player.lives)"
         playerView.addArrangedSubview(scoreLabel)
+        scoreLabel.backgroundColor = MyVariables.darkBlue
+        scoreLabel.textColor = MyVariables.white
+        
         
         // updating score inputs
-        let adjustScoreView = UIStackView()
+        let adjustScoreView = UIStackView() // score adjustments stack
         adjustScoreView.axis = .horizontal
         adjustScoreView.alignment = .fill
-        adjustScoreView.spacing = 0
+        
+        adjustScoreView.spacing = 2
         
         let minusButton = UIButton(type: .system)
         minusButton.setTitle("-", for: .normal)
         minusButton.addTarget(self,
                               action: #selector(minusButtonTapped(_:)),
                               for: .touchUpInside)
+        minusButton.backgroundColor = MyVariables.red
+        minusButton.setTitleColor(MyVariables.darkBlue, for: .normal)
         adjustScoreView.addArrangedSubview(minusButton)
         
         let scoreInput = UITextField()
         scoreInput.placeholder = "\(player.lives)"
         scoreInput.keyboardType = .numberPad
+        scoreInput.textColor = MyVariables.darkBlue
+        scoreInput.backgroundColor = MyVariables.white
         adjustScoreView.addArrangedSubview(scoreInput)
         
         let addButton = UIButton(type: .system)
@@ -93,7 +105,10 @@ class ViewController: UIViewController {
         addButton.addTarget(self,
                             action: #selector(addButtonTapped(_:)),
                             for: .touchUpInside)
+        addButton.backgroundColor = MyVariables.green
+        addButton.setTitleColor(MyVariables.darkBlue, for: .normal)
         adjustScoreView.addArrangedSubview(addButton)
+        
         
         playerView.addArrangedSubview(adjustScoreView)
         
