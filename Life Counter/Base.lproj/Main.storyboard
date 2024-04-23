@@ -19,7 +19,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k3A-AG-Urf">
                                 <rect key="frame" x="12" y="69" width="369" height="749"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="iQb-fs-sVe">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="iQb-fs-sVe">
                                         <rect key="frame" x="12" y="45" width="345" height="674"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="tT9-An-6Ff">
@@ -27,7 +27,7 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Players: 4" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3j-Dd-7rg">
                                                         <rect key="frame" x="0.0" y="0.0" width="245" height="32"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -40,7 +40,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="SeH-dH-TKJ">
-                                                <rect key="frame" x="0.0" y="59" width="345" height="34.333333333333343"/>
+                                                <rect key="frame" x="0.0" y="42" width="345" height="34.333333333333343"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t6J-dx-4wD">
                                                         <rect key="frame" x="0.0" y="0.0" width="169.66666666666666" height="34.333333333333336"/>
@@ -55,7 +55,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="23" translatesAutoresizingMaskIntoConstraints="NO" id="pJy-4o-xfZ">
-                                                <rect key="frame" x="0.0" y="120.33333333333331" width="345" height="553.66666666666674"/>
+                                                <rect key="frame" x="0.0" y="86.333333333333314" width="345" height="587.66666666666674"/>
                                                 <variation key="heightClass=compact" axis="horizontal"/>
                                             </stackView>
                                         </subviews>
@@ -85,10 +85,13 @@
                     <connections>
                         <outlet property="allPlayersStack" destination="pJy-4o-xfZ" id="0jR-dH-KNh"/>
                         <outlet property="backgroundView" destination="k3A-AG-Urf" id="Ycf-Nk-gEK"/>
+                        <outlet property="buttonStack" destination="SeH-dH-TKJ" id="Yz9-Sm-RwY"/>
                         <outlet property="historyButton" destination="zdD-xI-IqS" id="LCn-2A-rRi"/>
+                        <outlet property="playerCountStack" destination="tT9-An-6Ff" id="Zdy-Hn-6dL"/>
                         <outlet property="playerCountStepper" destination="B1H-rU-p4I" id="Nf3-5p-f31"/>
                         <outlet property="restartButton" destination="t6J-dx-4wD" id="zcT-oC-mwy"/>
                         <outlet property="stepperLabel" destination="P3j-Dd-7rg" id="gFh-ch-Y6C"/>
+                        <outlet property="topItemStack" destination="iQb-fs-sVe" id="3Nd-7d-SXK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

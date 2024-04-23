@@ -41,4 +41,9 @@ struct MyVariables {
     static let cornerRadius: CGFloat = 12
     static let defaultLives: Int = 20
     
+    // fonts
+    static let mainFont: UIFont = UIFont(name: "Helvetica Neue", size: 24.0)!
+    static let subFont: UIFont = UIFont(name: "Helvetica Neue", size: 24.0)!
+    
+    
 }

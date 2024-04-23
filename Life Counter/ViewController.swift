@@ -19,8 +19,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var restartButton: UIButton!
     @IBOutlet weak var historyButton: UIButton!
     
-    // Players stack
-    @IBOutlet weak var allPlayersStack: UIStackView!
+    @IBOutlet weak var topItemStack: UIStackView!
+    @IBOutlet weak var playerCountStack: UIStackView!
+    @IBOutlet weak var buttonStack: UIStackView!
+    @IBOutlet weak var allPlayersStack: UIStackView! // Players stack
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +35,11 @@ class ViewController: UIViewController {
         backgroundView.layer.masksToBounds = true
         
         allPlayersStack.axis = .vertical
+        
+        NSLayoutConstraint.activate([
+            playerCountStack.heightAnchor.constraint(equalTo: topItemStack.heightAnchor, multiplier: 0.05),
+            buttonStack.heightAnchor.constraint(equalTo: topItemStack.heightAnchor, multiplier: 0.05)
+        ])
         
         playerCountStepper.value = 4
         playerCountStepper.minimumValue = 2
@@ -49,7 +56,7 @@ class ViewController: UIViewController {
         
         for i in 1...4 {
             let name = "Player \(i)"
-            let newPlayer = Player(name, 20)
+            let newPlayer = Player(name, MyVariables.defaultLives)
             let playerView = createPlayerView(newPlayer)
             allPlayersStack.addArrangedSubview(playerView)
             updateGameHistory("Added \(name) to game.")
@@ -60,37 +67,50 @@ class ViewController: UIViewController {
         let playerView = UIStackView() // player stack
         playerView.axis = .vertical
         playerView.alignment = .fill
-        playerView.distribution = .equalSpacing
-        playerView.spacing = 1
+        playerView.distribution = .fillEqually
+        playerView.spacing = 5
         
-        // player name
+        // player name and score
+        let nameAndScoreView = UIStackView()
+        nameAndScoreView.axis = .horizontal
+        nameAndScoreView.alignment = .fill
+        nameAndScoreView.distribution = .fillProportionally
+        
         let nameLabel = UITextField()
         nameLabel.text = player.name
-        playerView.addArrangedSubview(nameLabel)
         nameLabel.textColor = MyVariables.darkBlue
+        nameLabel.font = MyVariables.mainFont
+        nameAndScoreView.addArrangedSubview(nameLabel)
         
-        // player score
         let scoreLabel = UILabel()
         scoreLabel.text = "\(player.lives)"
-        playerView.addArrangedSubview(scoreLabel)
         scoreLabel.backgroundColor = MyVariables.darkBlue
         scoreLabel.textColor = MyVariables.white
+        scoreLabel.font = MyVariables.subFont
+        scoreLabel.layer.cornerRadius = MyVariables.cornerRadius
+        scoreLabel.textAlignment = .center
+        scoreLabel.layer.masksToBounds = true
+        nameAndScoreView.addArrangedSubview(scoreLabel)
+        
+        playerView.addArrangedSubview(nameAndScoreView)
         
         
         // updating score inputs
         let adjustScoreView = UIStackView() // score adjustments stack
         adjustScoreView.axis = .horizontal
         adjustScoreView.alignment = .fill
-        
-        adjustScoreView.spacing = 2
+        adjustScoreView.spacing = 0
         
         let minusButton = UIButton(type: .system)
-        minusButton.setTitle("-", for: .normal)
+        minusButton.setTitle("Minus", for: .normal)
         minusButton.addTarget(self,
                               action: #selector(minusButtonTapped(_:)),
                               for: .touchUpInside)
         minusButton.backgroundColor = MyVariables.red
         minusButton.setTitleColor(MyVariables.darkBlue, for: .normal)
+        minusButton.layer.cornerRadius = MyVariables.cornerRadius
+        minusButton.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        minusButton.translatesAutoresizingMaskIntoConstraints = false
         adjustScoreView.addArrangedSubview(minusButton)
         
         let scoreInput = UITextField()
@@ -98,19 +118,29 @@ class ViewController: UIViewController {
         scoreInput.keyboardType = .numberPad
         scoreInput.textColor = MyVariables.darkBlue
         scoreInput.backgroundColor = MyVariables.white
+        scoreInput.translatesAutoresizingMaskIntoConstraints = false
+        scoreInput.textAlignment = .center
         adjustScoreView.addArrangedSubview(scoreInput)
         
         let addButton = UIButton(type: .system)
-        addButton.setTitle("+", for: .normal)
+        addButton.setTitle("Add", for: .normal)
         addButton.addTarget(self,
                             action: #selector(addButtonTapped(_:)),
                             for: .touchUpInside)
         addButton.backgroundColor = MyVariables.green
         addButton.setTitleColor(MyVariables.darkBlue, for: .normal)
+        addButton.layer.cornerRadius = MyVariables.cornerRadius
+        addButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+        addButton.translatesAutoresizingMaskIntoConstraints = false
         adjustScoreView.addArrangedSubview(addButton)
         
-        
         playerView.addArrangedSubview(adjustScoreView)
+        
+        NSLayoutConstraint.activate([
+            minusButton.widthAnchor.constraint(equalTo: adjustScoreView.widthAnchor, multiplier: 0.2),
+            scoreInput.widthAnchor.constraint(equalTo: adjustScoreView.widthAnchor, multiplier: 0.6),
+            addButton.widthAnchor.constraint(equalTo: minusButton.widthAnchor, multiplier: 1)
+        ])
         
         return playerView
     }
