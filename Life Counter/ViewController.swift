@@ -8,202 +8,145 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    var historyLog = [String]()
+    
     @IBOutlet weak var backgroundView: UIView!
-    @IBOutlet weak var playerLostLabel: UILabel!
     
-    // Player 1 Items
-    @IBOutlet weak var player1Label: UILabel!
-    @IBOutlet weak var player1Score: UILabel!
-    @IBOutlet weak var player1Sub5: UIButton!
-    @IBOutlet weak var player1Sub1: UIButton!
-    @IBOutlet weak var player1Add1: UIButton!
-    @IBOutlet weak var player1Add5: UIButton!
+    // Top items
+    @IBOutlet weak var stepperLabel: UILabel!
+    @IBOutlet weak var playerCountStepper: UIStepper!
+    @IBOutlet weak var restartButton: UIButton!
+    @IBOutlet weak var historyButton: UIButton!
     
-    // Player 2 Items
-    @IBOutlet weak var player2Label: UILabel!
-    @IBOutlet weak var player2Score: UILabel!
-    @IBOutlet weak var player2Sub5: UIButton!
-    @IBOutlet weak var player2Sub1: UIButton!
-    @IBOutlet weak var player2Add1: UIButton!
-    @IBOutlet weak var player2Add5: UIButton!
-    
-    var player1Points: Int = MyVariables.defaultLives
-    var player2Points: Int = MyVariables.defaultLives
+    // Players stack
+    @IBOutlet weak var allPlayersStack: UIStackView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.view.backgroundColor = MyVariables.white
-        playerLostLabel.isHidden = true
         
         // Background
         backgroundView.backgroundColor = MyVariables.lightBlue
         backgroundView.layer.cornerRadius = MyVariables.cornerRadius
         backgroundView.layer.masksToBounds = true
         
-        // Player Lost Label
-        playerLostLabel.textColor = MyVariables.darkBlue
+        allPlayersStack.axis = .vertical
         
-        // Player 1 Items
-        player1Label.text = Strings.player1Text
-        player1Label.textColor = MyVariables.darkBlue
+        playerCountStepper.value = 4
+        playerCountStepper.minimumValue = 2
+        playerCountStepper.maximumValue = 8
+        stepperLabel.text = "Number of Players: 4"
         
-        player1Score.textColor = MyVariables.white
-        player1Score.preferredMaxLayoutWidth = 336
-        player1Score.backgroundColor = MyVariables.darkBlue
-        player1Score.layer.cornerRadius = MyVariables.cornerRadius
-        player1Score.layer.masksToBounds = true
-        player1Score.text = "\(player1Points)"
+        initGame()
+    }
+    
+    func initGame() {
+        allPlayersStack.arrangedSubviews.forEach {
+            $0.removeFromSuperview()
+        }
         
-        player1Sub5.setTitle(Strings.sub5, for: .normal)
-        player1Sub5.layer.cornerRadius = MyVariables.cornerRadius
-        player1Sub5.layer.masksToBounds = true
-        player1Sub5.tintColor = MyVariables.red
+        for i in 1...4 {
+            let name = "Player \(i)"
+            let newPlayer = Player(name, 20)
+            let playerView = createPlayerView(newPlayer)
+            allPlayersStack.addArrangedSubview(playerView)
+            updateGameHistory("Added \(name) to game.")
+        }
+    }
+    
+    func createPlayerView(_ player: Player) -> UIStackView {
+        let playerView = UIStackView()
+        playerView.axis = .vertical
         
-        player1Sub1.setTitle(Strings.sub1, for: .normal)
-        player1Sub1.layer.cornerRadius = MyVariables.cornerRadius
-        player1Sub1.layer.masksToBounds = true
-        player1Sub1.tintColor = MyVariables.red
+        // player name
+        let nameLabel = UITextField()
+        nameLabel.text = player.name
+        playerView.addArrangedSubview(nameLabel)
         
-        player1Add1.setTitle(Strings.add1, for: .normal)
-        player1Add1.layer.cornerRadius = MyVariables.cornerRadius
-        player1Add1.layer.masksToBounds = true
-        player1Add1.tintColor = MyVariables.green
+        // player score
+        let scoreLabel = UILabel()
+        scoreLabel.text = "\(player.lives)"
+        playerView.addArrangedSubview(scoreLabel)
         
-        player1Add5.setTitle(Strings.add5, for: .normal)
-        player1Add5.layer.cornerRadius = MyVariables.cornerRadius
-        player1Add5.layer.masksToBounds = true
-        player1Add5.tintColor = MyVariables.green
+        // updating score inputs
+        let adjustScoreView = UIStackView()
+        adjustScoreView.axis = .horizontal
+        adjustScoreView.alignment = .fill
+        adjustScoreView.spacing = 0
         
-        // Connect buttons to action methods
-        player1Sub5.addTarget(
-            self,
-            action: #selector(updateScore),
-            for: .touchUpInside
-        )
-        player1Sub1.addTarget(
-            self,
-            action: #selector(updateScore),
-            for: .touchUpInside
-        )
-        player1Add1.addTarget(
-            self,
-            action: #selector(updateScore),
-            for: .touchUpInside
-        )
-        player1Add5.addTarget(
-            self,
-            action: #selector(updateScore),
-            for: .touchUpInside
-        )
+        let minusButton = UIButton(type: .system)
+        minusButton.setTitle("-", for: .normal)
+        minusButton.addTarget(self,
+                              action: #selector(minusButtonTapped(_:)),
+                              for: .touchUpInside)
+        adjustScoreView.addArrangedSubview(minusButton)
         
+        let scoreInput = UITextField()
+        scoreInput.placeholder = "\(player.lives)"
+        scoreInput.keyboardType = .numberPad
+        adjustScoreView.addArrangedSubview(scoreInput)
         
-        // Player 2 Items
-        player2Label.text = Strings.player2Text
-        player2Label.textColor = MyVariables.darkBlue
+        let addButton = UIButton(type: .system)
+        addButton.setTitle("+", for: .normal)
+        addButton.addTarget(self,
+                            action: #selector(addButtonTapped(_:)),
+                            for: .touchUpInside)
+        adjustScoreView.addArrangedSubview(addButton)
         
-        player2Score.textColor = MyVariables.white
-        player2Score.preferredMaxLayoutWidth = 336
-        player2Score.backgroundColor = MyVariables.darkBlue
-        player2Score.layer.cornerRadius = MyVariables.cornerRadius
-        player2Score.layer.masksToBounds = true
-        player2Score.text = "\(player2Points)"
+        playerView.addArrangedSubview(adjustScoreView)
         
-        player2Sub5.setTitle(Strings.sub5, for: .normal)
-        player2Sub5.layer.cornerRadius = MyVariables.cornerRadius
-        player2Sub5.layer.masksToBounds = true
-        player2Sub5.tintColor = MyVariables.red
-        
-        player2Sub1.setTitle(Strings.sub1, for: .normal)
-        player2Sub1.layer.cornerRadius = MyVariables.cornerRadius
-        player2Sub1.layer.masksToBounds = true
-        player2Sub1.tintColor = MyVariables.red
-        
-        player2Add1.setTitle(Strings.add1, for: .normal)
-        player2Add1.layer.cornerRadius = MyVariables.cornerRadius
-        player2Add1.layer.masksToBounds = true
-        player2Add1.tintColor = MyVariables.green
-        
-        player2Add5.setTitle(Strings.add5, for: .normal)
-        player2Add5.layer.cornerRadius = MyVariables.cornerRadius
-        player2Add5.layer.masksToBounds = true
-        player2Add5.tintColor = MyVariables.green
-        
-        // Connect buttons to action methods
-        player2Sub5.addTarget(
-            self,
-            action: #selector(updateScore),
-            for: .touchUpInside
-        )
-        player2Sub1.addTarget(
-            self,
-            action: #selector(updateScore),
-            for: .touchUpInside
-        )
-        player2Add1.addTarget(
-            self,
-            action: #selector(updateScore),
-            for: .touchUpInside
-        )
-        player2Add5.addTarget(
-            self,
-            action: #selector(updateScore),
-            for: .touchUpInside
-        )
-        
+        return playerView
+    }
+    
+    func updateGameHistory(_ log: String) {
+        print(log)
+    }
+    
+    @objc func minusButtonTapped(_ sender: UIButton) {
         
     }
     
-    @objc func updateScore(sender: UIButton) {
-        var updateBy: Int = 0
-        var playerNum: Int = 0
+    @objc func addButtonTapped(_ sender: UIButton) {
         
-        switch sender {
-        case player1Sub5:
-            updateBy = -5
-            playerNum = 1
-        case player1Sub1:
-            updateBy = -1
-            playerNum = 1
-        case player1Add1:
-            updateBy = 1
-            playerNum = 1
-        case player1Add5:
-            updateBy = 5
-            playerNum = 1
-        case player2Sub5:
-            updateBy = -5
-            playerNum = 2
-        case player2Sub1:
-            updateBy = -1
-            playerNum = 2
-        case player2Add1:
-            updateBy = 1
-            playerNum = 2
-        case player2Add5:
-            updateBy = 5
-            playerNum = 2
-        default:
-            break
+    }
+    
+    @IBAction func stepperValueChanged(_ sender: UIStepper) {
+        let newValue = Int(sender.value)
+        stepperLabel.text = "Number of Players: \(newValue)"
+        updateGameHistory("Changed number of players to \(newValue)")
+        
+        while allPlayersStack.arrangedSubviews.count > newValue {
+            if let lastPlayerView = allPlayersStack.arrangedSubviews.last {
+                allPlayersStack.removeArrangedSubview(lastPlayerView)
+                lastPlayerView.removeFromSuperview()
+            }
         }
         
-        if (playerNum == 1) {
-            player1Points += updateBy
-            if (player1Points >= 999) { player1Points = 999 }
-            player1Score.text = "\(player1Points)"
-        } else if (playerNum == 2) {
-            player2Points += updateBy
-            if (player2Points >= 999) { player2Points = 999 }
-            player2Score.text = "\(player2Points)"
+        while allPlayersStack.arrangedSubviews.count < newValue {
+            let newPlayer = Player("Player \(allPlayersStack.arrangedSubviews.count + 1)", 20)
+            let playerView = createPlayerView(newPlayer)
+            allPlayersStack.addArrangedSubview(playerView)
+            updateGameHistory("Added \(newPlayer.name) to game.")
         }
-        
-        if (player1Points <= 0) {
-            playerLostLabel.text = Strings.player1LostText
-            playerLostLabel.isHidden = false
-        } else if (player2Points <= 0) {
-            playerLostLabel.text = Strings.player2LostText
-            playerLostLabel.isHidden = false
-        }
-        
     }
 }
 
+struct Player {
+    var name: String
+    var lives: Int
+    
+    init(_ name: String, _ lives: Int) {
+        self.name = name
+        self.lives = lives
+    }
+    
+    mutating func updateName(_ newName: String) {
+        name = newName
+    }
+    
+    mutating func updateLives(_ update: Int) {
+        lives += update
+    }
+}
