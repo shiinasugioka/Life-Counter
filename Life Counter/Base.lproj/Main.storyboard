@@ -46,11 +46,19 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="169.66666666666666" height="34.333333333333336"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="filled" title="Restart"/>
+                                                        <connections>
+                                                            <action selector="restartButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7r9-OB-D0i"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zdD-xI-IqS">
                                                         <rect key="frame" x="175.66666666666663" y="0.0" width="169.33333333333337" height="34.333333333333336"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="filled" title="History"/>
+                                                        <connections>
+                                                            <action selector="historyButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ChL-S3-U0Q"/>
+                                                            <action selector="s:" destination="4jR-4n-Nvb" eventType="touchUpInside" id="Po0-G9-9QL"/>
+                                                            <segue destination="QMY-Z1-KhO" kind="show" identifier="showHistory" id="mEN-nv-yZe"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -86,7 +94,7 @@
                         <outlet property="allPlayersStack" destination="pJy-4o-xfZ" id="0jR-dH-KNh"/>
                         <outlet property="backgroundView" destination="k3A-AG-Urf" id="Ycf-Nk-gEK"/>
                         <outlet property="buttonStack" destination="SeH-dH-TKJ" id="Yz9-Sm-RwY"/>
-                        <outlet property="historyButton" destination="zdD-xI-IqS" id="LCn-2A-rRi"/>
+                        <outlet property="historyButton" destination="zdD-xI-IqS" id="Ir9-IG-Sif"/>
                         <outlet property="playerCountStack" destination="tT9-An-6Ff" id="Zdy-Hn-6dL"/>
                         <outlet property="playerCountStepper" destination="B1H-rU-p4I" id="Nf3-5p-f31"/>
                         <outlet property="restartButton" destination="t6J-dx-4wD" id="zcT-oC-mwy"/>
@@ -95,11 +103,50 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <exit id="4jR-4n-Nvb" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="139.69465648854961" y="3.5211267605633805"/>
         </scene>
+        <!--History View Controller-->
+        <scene sceneID="hLu-UI-Ftl">
+            <objects>
+                <viewController id="QMY-Z1-KhO" customClass="HistoryViewController" customModule="Life_Counter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lY8-1t-Kxe">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5Ad-UZ-hcD">
+                                <rect key="frame" x="12" y="0.0" width="369" height="446"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="XCS-6a-GlA"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="5Ad-UZ-hcD" firstAttribute="centerX" secondItem="lY8-1t-Kxe" secondAttribute="centerX" id="BuF-dB-iYt"/>
+                            <constraint firstItem="5Ad-UZ-hcD" firstAttribute="leading" secondItem="XCS-6a-GlA" secondAttribute="leading" constant="12" id="H5e-AV-B1V"/>
+                            <constraint firstItem="XCS-6a-GlA" firstAttribute="bottom" secondItem="5Ad-UZ-hcD" secondAttribute="bottom" constant="396" id="kC7-sd-cwf"/>
+                            <constraint firstItem="5Ad-UZ-hcD" firstAttribute="top" secondItem="XCS-6a-GlA" secondAttribute="top" id="qBl-r7-DdM"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="0fE-yt-PSw"/>
+                    <connections>
+                        <outlet property="historyTextView" destination="5Ad-UZ-hcD" id="TqH-t7-e4Y"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="azk-3a-lhd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="903" y="4"/>
+        </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

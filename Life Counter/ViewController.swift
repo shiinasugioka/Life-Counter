@@ -15,7 +15,7 @@ extension Array {
 
 class ViewController: UIViewController {
     
-    var historyLog = [String]()
+    public var historyLog = [String]()
     var players = [Player]()
     var gameOver = false
     
@@ -64,8 +64,8 @@ class ViewController: UIViewController {
         
         for i in 1...4 {
             let name = "Player \(i)"
-            let newPlayer = Player(name, MyVariables.defaultLives)
-            let playerView = createPlayerView(newPlayer, i)
+            var newPlayer = Player(name, MyVariables.defaultLives)
+            let playerView = createPlayerView(&newPlayer, i)
             players.append(newPlayer)
             allPlayersStack.addArrangedSubview(playerView)
             updateGameHistory("Added \(name) to game.")
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         gameOver = false
     }
     
-    func createPlayerView(_ player: Player, _ index: Int) -> UIStackView {
+    func createPlayerView(_ player: inout Player, _ index: Int) -> UIStackView {
         let playerView = UIStackView() // player stack
         playerView.axis = .vertical
         playerView.alignment = .fill
@@ -126,7 +126,7 @@ class ViewController: UIViewController {
         adjustScoreView.addArrangedSubview(minusButton)
         
         let scoreInput = UITextField()
-        scoreInput.placeholder = "\(player.lives)"
+        scoreInput.text = "\(player.lives)"
         scoreInput.keyboardType = .numberPad
         scoreInput.textColor = MyVariables.darkBlue
         scoreInput.backgroundColor = MyVariables.white
@@ -148,6 +148,9 @@ class ViewController: UIViewController {
         addButton.translatesAutoresizingMaskIntoConstraints = false
         adjustScoreView.addArrangedSubview(addButton)
         
+        player.setScoreInputField(scoreInput)
+        player.setScoreLabel(scoreLabel)
+        
         playerView.addArrangedSubview(adjustScoreView)
         
         NSLayoutConstraint.activate([
@@ -160,41 +163,23 @@ class ViewController: UIViewController {
     }
     
     func updateGameHistory(_ log: String) {
-        print(log)
+        historyLog.append(log)
     }
     
     @objc func minusButtonTapped(_ sender: UIButton) {
-        guard let index = sender.tag,
-              var player = players[safe: index],
-              let scoreLabel = allPlayersStack.arrangedSubviews[index].subviews.first(where: { $0 is UILabel }) as? UILabel,
-              let scoreInput = allPlayersStack.arrangedSubviews[index].subviews.first(where: { $0 is UITextField }) as? UITextField,
-              let inputText = scoreLabel.text,
-              let currentScore = Int(inputText),
-              let decreaseAmount = Int(scoreInput.text ?? "") else {
-            return
-        }
+        var player = players[sender.tag - 1]
+        let changeValue = Int(player.scoreInput?.text ?? "0")
+        player.updateLives(-changeValue!)
         
-        player.updateLives(-decreaseAmount)
-        scoreLabel.text = "\(player.lives)"
-        updateGameHistory("\(player.name)'s score decreased by \(decreaseAmount)")
-        checkGameOver()
+        updateGameHistory("\(player.name) lost \(changeValue ?? 0) lives.")
     }
     
     @objc func addButtonTapped(_ sender: UIButton) {
-        guard let index = sender.tag,
-              var player = players[safe: index],
-              let scoreLabel = allPlayersStack.arrangedSubviews[index].subviews.first(where: { $0 is UILabel }) as? UILabel,
-              let scoreInput = allPlayersStack.arrangedSubviews[index].subviews.first(where: { $0 is UITextField }) as? UITextField,
-              let inputText = scoreLabel.text,
-              let currentScore = Int(inputText),
-              let increaseAmount = Int(scoreInput.text ?? "") else {
-            return
-        }
+        var player = players[sender.tag - 1]
+        let changeValue = Int(player.scoreInput?.text ?? "0")
+        player.updateLives(changeValue ?? 0)
         
-        player.updateLives(increaseAmount)
-        scoreLabel.text = "\(player.lives)"
-        updateGameHistory("\(player.name)'s score increased by \(increaseAmount)")
-        checkGameOver()
+        updateGameHistory("\(player.name) gained \(changeValue ?? 0) lives.")
     }
     
     func checkGameOver() {
@@ -214,19 +199,39 @@ class ViewController: UIViewController {
         }
         
         while allPlayersStack.arrangedSubviews.count < newValue {
-            let newPlayer = Player("Player \(allPlayersStack.arrangedSubviews.count + 1)", 20)
-            let playerView = createPlayerView(newPlayer, allPlayersStack.arrangedSubviews.count + 1)
+            var newPlayer = Player("Player \(allPlayersStack.arrangedSubviews.count + 1)", 20)
+            let playerView = createPlayerView(&newPlayer, allPlayersStack.arrangedSubviews.count + 1)
             allPlayersStack.addArrangedSubview(playerView)
             updateGameHistory("Added \(newPlayer.name) to game.")
         }
     }
     
+    @IBAction func restartButtonPressed(_ sender: UIButton) {
+        // Reset game state
+        players.removeAll()
+        initGame()
+        historyLog.removeAll()
+        updateGameHistory("Started new game.")
+    }
     
+    @IBAction func historyButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "showHistory", sender: self)
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showHistory" {
+            if let historyViewController = segue.destination as? HistoryViewController {
+                historyViewController.history = historyLog
+            }
+        }
+    }
 }
 
 struct Player {
     var name: String
     var lives: Int
+    var scoreInput: UITextField?
+    var scoreLabel: UILabel?
     
     init(_ name: String, _ lives: Int) {
         self.name = name
@@ -238,6 +243,15 @@ struct Player {
     }
     
     mutating func updateLives(_ update: Int) {
-        lives += update
+        lives = update + (Int((scoreLabel?.text)!) ?? 20)
+        scoreLabel?.text = "\(lives)"
+    }
+    
+    mutating func setScoreInputField(_ newScoreField: UITextField) {
+        scoreInput = newScoreField
+    }
+    
+    mutating func setScoreLabel(_ newScoreLabel: UILabel) {
+        scoreLabel = newScoreLabel
     }
 }

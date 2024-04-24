@@ -18,6 +18,7 @@
 		DB2388A32BCEF8E700777799 /* Life_CounterUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2388A22BCEF8E700777799 /* Life_CounterUITestsLaunchTests.swift */; };
 		DB2388B02BCF05FF00777799 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2388AF2BCF05FF00777799 /* Variables.swift */; };
 		DB2388B22BCF09A500777799 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2388B12BCF09A500777799 /* Strings.swift */; };
+		DB468DD42BD8CF1100737B56 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB468DD32BD8CF1100737B56 /* HistoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		DB2388A22BCEF8E700777799 /* Life_CounterUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Life_CounterUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		DB2388AF2BCF05FF00777799 /* Variables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
 		DB2388B12BCF09A500777799 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
+		DB468DD32BD8CF1100737B56 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 				DB2388882BCEF8E700777799 /* Assets.xcassets */,
 				DB23888A2BCEF8E700777799 /* LaunchScreen.storyboard */,
 				DB23888D2BCEF8E700777799 /* Info.plist */,
+				DB468DD32BD8CF1100737B56 /* HistoryViewController.swift */,
 			);
 			path = "Life Counter";
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 				DB2388842BCEF8E500777799 /* ViewController.swift in Sources */,
 				DB2388802BCEF8E500777799 /* AppDelegate.swift in Sources */,
 				DB2388B22BCF09A500777799 /* Strings.swift in Sources */,
+				DB468DD42BD8CF1100737B56 /* HistoryViewController.swift in Sources */,
 				DB2388822BCEF8E500777799 /* SceneDelegate.swift in Sources */,
 				DB2388B02BCF05FF00777799 /* Variables.swift in Sources */,
 			);
